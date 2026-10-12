@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Khủng Long Mất Mạng (Có Hình)</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-color: #f7f7f7;
+      font-family: Arial, sans-serif;
+    }
+    #game-container {
+      position: relative;
+      width: 600px;
+      height: 200px;
+      background-color: #fff;
+      border-bottom: 2px solid #535353;
+      overflow: hidden;
+      border-radius: 4px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    #dino {
+      position: absolute;
+      bottom: 0;
+      left: 50px;
+      width: 40px; /* Chiều rộng khung hình khủng long */
+      height: 40px; /* Chiều cao khung hình khủng long */
+      
+      /* --- THAY ĐỔI CHÍNH Ở ĐÂY: DÙNG HÌNH ẢNH --- */
+      background-image: url('dino.png'); /* Đường dẫn file hình của bạn */
+      background-size: contain; /* Co dãn hình vừa khung */
+      background-repeat: no-repeat;
+      background-position: center;
+      /* background-color: #535353; */ /* Xóa màu nền ô vuông */
+    }
+    #cactus {
+      position: absolute;
+      bottom: 0;
+      right: -30px;
+      width: 30px; /* Chiều rộng chướng ngại vật */
+      height: 50px; /* Chiều cao chướng ngại vật */
+      
+      /* --- THAY ĐỔI CHÍNH Ở ĐÂY: DÙNG HÌNH ẢNH --- */
+      background-image: url('cactus.png'); /* Đường dẫn file hình xương rồng */
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      /* background-color: #2e7d32; */ /* Xóa màu nền ô vuông */
+    }
+    .jump {
+      animation: jump 0.5s cubic-bezier(0.1, 0.7, 0.1, 1);
+    }
+    @keyframes jump {
+      0% { bottom: 0; }
+      50% { bottom: 120px; } /* Nhảy cao hơn một chút */
+      100% { bottom: 0; }
+    }
+    #score-board {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #535353;
+    }
+    #instructions {
+      margin-top: 15px;
+      color: #666;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="game-container">
+    <div id="score-board">Điểm: <span id="score">0</span></div>
+    <div id="dino"></div>
+    <div id="cactus"></div>
+  </div>
+  <p id="instructions">Nhấn **Phím cách (Space)** hoặc **chạm** để nhảy!</p>
+
+  <script>
+    const dino = document.getElementById("dino");
+    const cactus = document.getElementById("cactus");
+    const scoreElement = document.getElementById("score");
+
+    let score = 0;
+    let isJumping = false;
+    let isGameOver = false;
+    let cactusPosition = 600;
+    let gameSpeed = 5;
+
+    // Xử lý sự kiện nhảy
+    document.addEventListener("keydown", function (event) {
+      if ((event.code === "Space" || event.code === "ArrowUp") && !isGameOver
